@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import argparse
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
@@ -15,7 +16,7 @@ IMAGE_DIR = os.path.expanduser("~/Documents/bingo")
 SUPPORTED_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp')
 
 class BingoViewer:
-    def __init__(self, root):
+    def __init__(self, root, image_dir):
         self.root = root
         self.root.title("Bingo Photo Viewer")
         self.root.attributes('-fullscreen', True)
@@ -27,11 +28,11 @@ class BingoViewer:
         self.root.bind('<Left>', self.prev_image)
         self.root.bind('<Escape>', self.close)
         
-        self.image_paths = self.load_images(IMAGE_DIR)
-        print(f"Found {len(self.image_paths)} images in {IMAGE_DIR}")
+        self.image_paths = self.load_images(image_dir)
+        print(f"Found {len(self.image_paths)} images in {image_dir}")
         
         if not self.image_paths:
-            messagebox.showerror("Error", f"No images found in {IMAGE_DIR}")
+            messagebox.showerror("Error", f"No images found in {image_dir}")
             self.root.destroy()
             return
             
@@ -116,6 +117,23 @@ class BingoViewer:
         self.root.destroy()
 
 if __name__ == "__main__":
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description='Bingo Photo Viewer - Display photos in random order',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        '--folder', '-f',
+        type=str,
+        default='bingo',
+        help='Source folder name within ~/Documents/ (default: "bingo")'
+    )
+    
+    args = parser.parse_args()
+    
+    # Construct image directory from folder argument
+    image_dir = os.path.expanduser(f"~/Documents/{args.folder}")
+    
     root = tk.Tk()
-    app = BingoViewer(root)
+    app = BingoViewer(root, image_dir)
     root.mainloop()
