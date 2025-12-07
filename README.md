@@ -87,6 +87,11 @@ The bingo card generator creates printable 5x5 photo bingo cards from your image
    python3 generate_bingo_cards.py -t "Wedding Bingo" -c 15 -m
    ```
 
+6. **Use a different source folder**:
+   ```bash
+   python3 generate_bingo_cards.py --folder "vacation_photos" --title "Vacation Bingo"
+   ```
+
 #### Command-Line Options
 
 | Option | Short | Description | Default |
@@ -94,6 +99,7 @@ The bingo card generator creates printable 5x5 photo bingo cards from your image
 | `--title` | `-t` | Title displayed on the cards | `"J&J's BINGO"` |
 | `--count` | `-c` | Number of cards to generate | `10` |
 | `--multicolour` | `-m` | Use random pastel colors | `False` (pink) |
+| `--folder` | `-f` | Source folder within ~/Documents/ | `"bingo"` |
 | `--help` | `-h` | Show help message | - |
 
 #### Output
