@@ -9,7 +9,7 @@ IMAGE_DIR = os.path.expanduser("~/Documents/bingo")
 SUPPORTED_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp')
 
 # Bingo card settings
-GRID_SIZE = 5  # 5x5 grid
+GRID_SIZE = 5  # 5x5 grid 
 NUM_CARDS = 10  # Generate 10 cards
 CELL_SIZE = 200  # Size of each cell in pixels
 BORDER_WIDTH = 4  # Border between cells
