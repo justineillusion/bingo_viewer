@@ -234,11 +234,28 @@ Examples:
     folder_name = sanitize_folder_name(args.title)
     output_dir = os.path.join(image_dir, "bingo_cards", folder_name)
     os.makedirs(output_dir, exist_ok=True)
+    
+    # Find existing cards to continue numbering
+    existing_cards = [f for f in os.listdir(output_dir) if f.startswith("bingo_card_") and f.endswith(".png")]
+    if existing_cards:
+        # Extract numbers from existing card filenames
+        import re
+        numbers = []
+        for card in existing_cards:
+            match = re.search(r'bingo_card_(\d+)\.png', card)
+            if match:
+                numbers.append(int(match.group(1)))
+        start_number = max(numbers) + 1 if numbers else 1
+        print(f"Found {len(existing_cards)} existing cards. Starting from card #{start_number}")
+    else:
+        start_number = 1
+    
     print(f"Creating {args.count} bingo cards with title '{args.title}' in {output_dir}...")
     
     # Generate cards
     for i in range(args.count):
-        print(f"Generating card {i + 1}/{args.count}...")
+        card_number = start_number + i
+        print(f"Generating card {card_number} ({i + 1}/{args.count})...")
         
         # Select background color
         if args.multicolour:
@@ -246,10 +263,10 @@ Examples:
         else:
             bg_color = BACKGROUND_COLOR_PINK
         
-        card = create_bingo_card(images, i + 1, title=args.title, background_color=bg_color)
+        card = create_bingo_card(images, card_number, title=args.title, background_color=bg_color)
         
         # Save the card
-        output_path = os.path.join(output_dir, f"bingo_card_{i + 1:02d}.png")
+        output_path = os.path.join(output_dir, f"bingo_card_{card_number:02d}.png")
         card.save(output_path, "PNG", quality=95)
         print(f"Saved: {output_path}")
     
