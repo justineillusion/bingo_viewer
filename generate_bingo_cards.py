@@ -175,14 +175,17 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Generate 10 cards with default title "J&J's BINGO"
+  # Generate 10 cards with default title "J&J's BINGO" from ~/Documents/bingo
   python generate_bingo_cards.py
   
   # Generate cards with custom title
   python generate_bingo_cards.py --title "R&L"
   
-  # Generate 20 cards with custom title
-  python generate_bingo_cards.py --title "Sarah & Mike" --count 20
+  # Generate 20 cards with custom title and multicolour
+  python generate_bingo_cards.py --title "Sarah & Mike" --count 20 --multicolour
+  
+  # Use a different source folder in Documents
+  python generate_bingo_cards.py --folder "wedding_photos" --title "Wedding Bingo"
         """
     )
     parser.add_argument(
@@ -202,11 +205,20 @@ Examples:
         action='store_true',
         help='Use random pastel colors for each card (default: pink for all cards)'
     )
+    parser.add_argument(
+        '--folder', '-f',
+        type=str,
+        default='bingo',
+        help='Source folder name within ~/Documents/ (default: "bingo")'
+    )
     
     args = parser.parse_args()
     
-    print(f"Loading images from {IMAGE_DIR}...")
-    images = load_images(IMAGE_DIR)
+    # Construct image directory from folder argument
+    image_dir = os.path.expanduser(f"~/Documents/{args.folder}")
+    
+    print(f"Loading images from {image_dir}...")
+    images = load_images(image_dir)
     
     if not images:
         print("Error: No images found!")
@@ -220,7 +232,7 @@ Examples:
     
     # Create output directory based on title
     folder_name = sanitize_folder_name(args.title)
-    output_dir = os.path.join(IMAGE_DIR, "bingo_cards", folder_name)
+    output_dir = os.path.join(image_dir, "bingo_cards", folder_name)
     os.makedirs(output_dir, exist_ok=True)
     print(f"Creating {args.count} bingo cards with title '{args.title}' in {output_dir}...")
     
