@@ -56,6 +56,9 @@ class BingoViewer:
         
         # Walk recursively
         for root, dirs, files in os.walk(directory):
+            # Skip the output directory
+            if 'bingo_cards' in root:
+                continue
             for filename in files:
                 if filename.lower().endswith(SUPPORTED_EXTENSIONS):
                     images.append(os.path.join(root, filename))
